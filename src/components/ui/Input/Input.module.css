@@ -1,0 +1,36 @@
+.formGroup {
+    position: relative;
+}
+.label {
+    position: absolute;
+    color: slategray;
+    font-size: 20px;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 150ms;
+}
+.input {
+    padding: 15px 15px;
+    border-radius: 4px;
+    border: 1px solid slategray;
+    outline: none;
+    font-size: 20px;
+    margin: 4px;
+}
+.input::placeholder {
+    opacity: 0;
+    transition: 150ms;
+    color: slategray;
+}
+.input:focus {
+    border-color: slateblue;
+}
+.input:focus + .label {
+    transform: translateY(-150%);
+    font-size: 13px;
+    color: slateblue;
+}
+.input:focus::placeholder {
+    opacity: 1;
+}
