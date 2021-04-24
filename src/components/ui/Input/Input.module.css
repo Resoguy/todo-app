@@ -34,3 +34,7 @@
 .input:focus::placeholder {
     opacity: 1;
 }
+.block {
+    display: block;
+    width: 100%;;
+}

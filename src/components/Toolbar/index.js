@@ -1,13 +1,21 @@
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 import s from './Toolbar.module.css';
 
 
-const Toolbar = () => {
+const Toolbar = ({isAuthenticated, user, jwt}) => {
     const links = [
         {url: '/', title: 'Home'},
         {url: '/todos', title: 'Todos'},
-        {url: '/about', title: 'About'}
+        {url: '/about', title: 'About'},
     ]
+
+    if (!jwt) {
+        links.push(
+            {url: '/login', title: 'Login'},
+            {url: '/register', title: 'Register'}
+        )
+    }
 
     return (
         <nav className={s.toolbar}>
@@ -19,6 +27,8 @@ const Toolbar = () => {
                 {
                     links.map(link => <ToolbarItem key={link.url} link={link} />)
                 }
+
+                {user && <li>Hello, {user.username}</li>}
             </ul>
         </nav>
     )
@@ -32,4 +42,13 @@ const ToolbarItem = ({link}) => (
     </li>
 )
 
-export default Toolbar;
+const mapStateToProps = (state) => {
+
+    return {
+        jwt: state.jwt,
+        user: state.user
+    }
+
+}
+
+export default connect(mapStateToProps)(Toolbar);
