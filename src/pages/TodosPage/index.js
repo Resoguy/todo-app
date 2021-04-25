@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {connect} from 'react-redux';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
@@ -21,7 +22,7 @@ class TodosPage extends React.Component {
     }
 
     fetchTodos = async () => {
-        const response = await fetch('http://localhost:1337/todos');
+        const response = await fetch(`http://localhost:1337/todos?user=${this.props.user.id}`);
         const data = await response.json();
 
         this.setState({todos: data});
@@ -32,7 +33,8 @@ class TodosPage extends React.Component {
             body: JSON.stringify(newTodo),
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.props.jwt}`
             }
         });
         const data = await response.json();
@@ -45,7 +47,10 @@ class TodosPage extends React.Component {
 
         this.setState({isSubmitting: true});
 
-        const newTodo = { title: this.state.todoTitle };
+        const newTodo = { 
+            title: this.state.todoTitle,
+            user: this.props.user.id
+        };
 
         await this.postTodo(newTodo);
 
@@ -66,7 +71,8 @@ class TodosPage extends React.Component {
                 completed: !todo.completed
             }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.props.jwt}`
             }
         });
         // guncel datayi cek
@@ -77,7 +83,10 @@ class TodosPage extends React.Component {
     deleteTodo = async (todoId) => {
         // silme istegi at
         await fetch(`http://localhost:1337/todos/${todoId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.props.jwt}`
+            }
         });
 
         // guncel datayi cek
@@ -162,4 +171,9 @@ const TodoCard = ({todo, onToggleDone, onDelete}) => {
     )
 }
 
-export default TodosPage;
+const mapStateToProps = (state) => ({
+    user: state.user,
+    jwt: state.jwt
+})
+
+export default connect(mapStateToProps)(TodosPage);

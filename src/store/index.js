@@ -7,6 +7,9 @@ const reducer = (state = INITIAL_STATE, action) => {
 
         case 'SET_USER':
             return {...state, user: action.payload};
+
+        case 'LOGOUT':
+            return {...state, user: null, jwt: null};
     
         default:
             return state;

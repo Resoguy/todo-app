@@ -1,9 +1,15 @@
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {logout as logoutAction} from '../../store/actions';
 import s from './Toolbar.module.css';
 
 
-const Toolbar = ({isAuthenticated, user, jwt}) => {
+const Toolbar = ({user, jwt, dispatch}) => {
+    const logout = () => {
+        window.localStorage.removeItem('jwt');
+        dispatch(logoutAction());
+    }
+
     const links = [
         {url: '/', title: 'Home'},
         {url: '/todos', title: 'Todos'},
@@ -28,7 +34,14 @@ const Toolbar = ({isAuthenticated, user, jwt}) => {
                     links.map(link => <ToolbarItem key={link.url} link={link} />)
                 }
 
-                {user && <li>Hello, {user.username}</li>}
+                {
+                    jwt && 
+                    <li className={s.toolbarItem}>
+                        <a href="#" className={s.toolbarLink} onClick={logout}>
+                            Logout
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
     )
