@@ -1,19 +1,21 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import Card from '../../components/ui/Card';
-import s from './HomePage.module.css';
+import s from './UserDetailsPage.module.css';
 
-class HomePage extends React.Component {
+
+class UserDetailsPage extends React.Component {
     state = {
         todos: []
     }
 
     componentDidMount() {
-        this.fetchTodos();
+        this.fetchUserTodos();
     }
 
-    fetchTodos = async () => {
-        const response = await fetch('http://localhost:1337/todos?_sort=updated_at:desc&&_limit=10');
+    fetchUserTodos = async () => {
+        const userId = this.props.match.params.id;
+        const response = await fetch(`http://localhost:1337/todos?user=${userId}&&_sort=updated_at:desc`)
         const data = await response.json();
 
         this.setState({todos: data});
@@ -24,12 +26,9 @@ class HomePage extends React.Component {
 
         return (
             <div>
-                <h1>Home Page</h1>
-                <hr/>
+                <h1>User Todos</h1>
 
-                <h2>Last 10 Todos</h2>
-
-                <div className={s.todosGrid}>
+                <div>
                     {
                         todos.map(todo => <TodoCard key={todo.id} todo={todo} />)
                     }
@@ -52,14 +51,12 @@ const TodoCard = ({todo}) => {
                 <small>Updated at: {updatedAt}</small>
             </p>
             <h3>{todo.title}</h3>
+            <p>{todo.user.username}</p>
             <h4>
-                Status: <span className={s[todo.completed ? 'green' : 'red']}>
-                    {todo.completed ? 'Completed' : 'Not Completed'}
-                    </span>
+                Status: <span className={s[todo.completed ? 'green' : 'red']}>{todo.completed ? 'Completed' : 'Not Completed'}</span>
             </h4>
-            <Link to={`/users/${todo.user.id}`}>{todo.user.username}</Link>
         </Card>
     )
 }
 
-export default HomePage;
+export default withRouter(UserDetailsPage);

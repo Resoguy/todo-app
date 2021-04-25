@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import {setJwt, setUser} from './store/actions';
 import s from './App.module.css';
 import React from 'react';
+import UserDetailsPage from './pages/UserDetailsPage';
 
 const meApi = 'http://localhost:1337/users/me';
 
@@ -74,6 +75,10 @@ class App extends React.Component {
               <PrivateRoute path="/todos">
                 <TodosPage />
               </PrivateRoute>
+
+              <Route path="/users/:id">
+                <UserDetailsPage />
+              </Route>
   
               <Route path="/login">
                 <LoginPage />

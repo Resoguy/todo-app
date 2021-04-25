@@ -1,0 +1,12 @@
+.todosGrid {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 50px auto;
+}
+.red {
+    color: tomato;
+}
+.green {
+    color: green;
+}
